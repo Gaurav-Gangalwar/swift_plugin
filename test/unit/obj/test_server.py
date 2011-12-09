@@ -36,10 +36,13 @@ from test.unit import connect_tcp, readuntil2crlfs
 from swift.obj import server as object_server
 from swift.common import utils
 from swift.common.utils import hash_path, mkdirs, normalize_timestamp, \
-                               NullLogger, storage_directory
+                               NullLogger, storage_directory, plugin_enabled
 from swift.common.exceptions import DiskFileNotExist
 from eventlet import tpool
-
+if plugin_enabled():
+    from swift.plugins.constraints import MAX_OBJECT_NAME_LENGTH
+else:
+    from swift.common.constraints import MAX_OBJECT_NAME_LENGTH
 
 class TestDiskFile(unittest.TestCase):
     """Test swift.obj.server.DiskFile"""
@@ -1354,7 +1357,7 @@ class TestObjectController(unittest.TestCase):
 
     def test_max_object_name_length(self):
         timestamp = normalize_timestamp(time())
-        req = Request.blank('/sda1/p/a/c/' + ('1' * 1024),
+        req = Request.blank('/sda1/p/a/c/' + ('1' * MAX_OBJECT_NAME_LENGTH),
                 environ={'REQUEST_METHOD': 'PUT'},
                 headers={'X-Timestamp': timestamp,
                          'Content-Length': '4',

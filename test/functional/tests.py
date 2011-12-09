@@ -31,6 +31,16 @@ import urllib
 from test import get_config
 from swift import Account, AuthenticationFailed, Connection, Container, \
      File, ResponseError
+from test import plugin_enabled
+if plugin_enabled():
+    from test import MAX_OBJECT_NAME_LENGTH, \
+                    MAX_CONTAINER_NAME_LENGTH, MAX_ACCOUNT_NAME_LENGTH, \
+                    MAX_FILE_SIZE
+else:
+    from test import MAX_OBJECT_NAME_LENGTH, \
+                    MAX_CONTAINER_NAME_LENGTH, MAX_ACCOUNT_NAME_LENGTH, \
+                    MAX_FILE_SIZE
+
 
 config = get_config()
 
@@ -361,7 +371,7 @@ class TestContainer(Base):
     set_up = False
 
     def testContainerNameLimit(self):
-        limit = 256
+        limit = MAX_CONTAINER_NAME_LENGTH
 
         for l in (limit-100, limit-10, limit-1, limit,
             limit+1, limit+10, limit+100):
@@ -949,7 +959,7 @@ class TestFile(Base):
             self.assert_status(404)
 
     def testNameLimit(self):
-        limit = 1024
+        limit = MAX_OBJECT_NAME_LENGTH
 
         for l in (1, 10, limit/2, limit-1, limit, limit+1, limit*2):
             file = self.env.container.file('a'*l)
@@ -1093,7 +1103,7 @@ class TestFile(Base):
             self.assert_(file.read(hdrs={'Range': r}) == data[0:1000])
 
     def testFileSizeLimit(self):
-        limit = 5*2**30 + 2
+        limit = MAX_FILE_SIZE
         tsecs = 3
 
         for i in (limit-100, limit-10, limit-1, limit, limit+1, limit+10,
