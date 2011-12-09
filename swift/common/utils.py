@@ -1106,3 +1106,9 @@ def dump_recon_cache(cache_key, cache_value, cache_file, lock_timeout=2):
             except OSError, err:
                 if err.errno != errno.ENOENT:
                     raise
+
+def plugin_enabled():
+    swift_conf = ConfigParser()
+    swift_conf.read(os.path.join('/etc/swift', 'swift.conf'))
+    return swift_conf.get('DEFAULT', 'Enable_plugin', 'no') in TRUE_VALUES
+
