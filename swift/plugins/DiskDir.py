@@ -362,8 +362,7 @@ class DiskDir(DiskCommon):
         Create the container if it doesn't exist and update the timestamp
         """
         if not os.path.exists(self.datadir):
-            os.mkdir(self.datadir);
-            create_container_metadata(self.datadir)
+            self.put(self.metadata)
 
     def delete_object(self, name, timestamp):
         # TODO: Implement the delete object
@@ -389,10 +388,8 @@ class DiskDir(DiskCommon):
         self.unlink()
 
     def update_metadata(self, metadata):
-        if os.path.exists(self.datadir):
-            write_metadata(self.datadir, metadata)
-        else:
-            self.put(metadata)
+        self.metadata.update(metadata)
+        write_metadata(self.datadir, self.metadata)
 
 
 class DiskAccount(DiskDir):

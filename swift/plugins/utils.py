@@ -242,7 +242,7 @@ def read_metadata(path):
     if metadata:
         return pickle.loads(metadata)
     else:
-        return metadata
+        return {}
 
 
 def write_metadata(path, metadata):
@@ -616,13 +616,28 @@ def get_account_metadata(acc_path, memcache=None):
     return metadata
 
 def restore_object(obj_path, metadata):
-    write_metadata(obj_path, metadata)
+    meta = read_metadata(obj_path)
+    if meta:
+        meta.update(metadata)
+        write_metadata(obj_path, meta)
+    else:
+        write_metadata(obj_path, metadata)
 
 def restore_container(cont_path, metadata):
-    write_metadata(cont_path, metadata)
+    meta = read_metadata(cont_path)
+    if meta:
+        meta.update(metadata)
+        write_metadata(cont_path, meta)
+    else:
+        write_metadata(cont_path, metadata)
 
 def restore_account(acc_path, metadata):
-    write_metadata(acc_path, metadata)
+    meta = read_metadata(acc_path)
+    if meta:
+        meta.update(metadata)
+        write_metadata(acc_path, meta)
+    else:
+        write_metadata(acc_path, metadata)
 
 def create_object_metadata(obj_path):
     meta = get_object_metadata(obj_path)
