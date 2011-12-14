@@ -8,7 +8,12 @@ from ConfigParser import MissingSectionHeaderError
 from StringIO import StringIO
 from swift.common.utils import readconf
 from swift.common.utils import plugin_enabled
-from swift.common.constraints import MAX_OBJECT_NAME_LENGTH, \
+if plugin_enabled:
+    from swift.plugins.constraints import MAX_OBJECT_NAME_LENGTH, \
+          MAX_CONTAINER_NAME_LENGTH, MAX_ACCOUNT_NAME_LENGTH, \
+          MAX_FILE_SIZE
+else:
+    from swift.common.constraints import MAX_OBJECT_NAME_LENGTH, \
           MAX_CONTAINER_NAME_LENGTH, MAX_ACCOUNT_NAME_LENGTH, \
           MAX_FILE_SIZE
 
