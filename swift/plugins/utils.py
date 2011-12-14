@@ -283,6 +283,9 @@ def dir_empty(path):
             return True
         else:
             return False
+    else:
+        if not os.path.exists(path):
+            return True
 
 
 def get_device_from_account(account):

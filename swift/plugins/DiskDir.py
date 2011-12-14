@@ -368,19 +368,6 @@ class DiskDir(DiskCommon):
         # TODO: Implement the delete object
         pass
 
-    def empty(self):
-        """
-        return True: if the container is empty
-               False: otherwise
-        """
-        try:
-            if len(os.listdir(self.datadir)) == 0:
-                return True
-        except OSError:
-            pass
-
-        return False
-
     def delete_db(self, timestamp):
         """
         Delete the container
@@ -480,9 +467,3 @@ class DiskAccount(DiskDir):
         if include_metadata:
             data['metadata'] = metadata
         return data
-    def put_container(self, container, put_timestamp, delete_timestamp,
-                      object_count, bytes_used):
-        """
-        Update the account metadata
-        """
-        pass
